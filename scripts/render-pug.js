@@ -5,22 +5,21 @@ const pug = require('pug');
 const sh = require('shelljs');
 const prettier = require('prettier');
 
-module.exports = function renderPug(filePath) {
-    const destPath = filePath.replace(/src\/pug\//, 'dist/').replace(/\.pug$/, '.html');
-    const srcPath = upath.resolve(upath.dirname(__filename), '../src');
+module.exports = function renderPug(filePath, data) {
+    // Compile the Pug template using the filePath and data
+    const compiledFunction = pug.compileFile(filePath);
+    const html = compiledFunction(data);
 
-    console.log(`### INFO: Rendering ${filePath} to ${destPath}`);
-    const html = pug.renderFile(filePath, {
-        doctype: 'html',
-        filename: filePath,
-        basedir: srcPath
-    });
+    // Define the output path for the generated HTML
+    const outputPath = upath.join(__dirname, '../dist', upath.basename(filePath, '.pug') + '.html');
 
-    const destPathDirname = upath.dirname(destPath);
+    // Ensure the destination directory exists
+    const destPathDirname = upath.dirname(outputPath);
     if (!sh.test('-e', destPathDirname)) {
         sh.mkdir('-p', destPathDirname);
     }
 
+    // Format the HTML using Prettier before writing to the file
     const prettified = prettier.format(html, {
         printWidth: 1000,
         tabWidth: 4,
@@ -31,5 +30,6 @@ module.exports = function renderPug(filePath) {
         htmlWhitespaceSensitivity: 'ignore'
     });
 
-    fs.writeFileSync(destPath, prettified);
+    // Write the formatted HTML to the output path
+    fs.writeFileSync(outputPath, prettified);
 };

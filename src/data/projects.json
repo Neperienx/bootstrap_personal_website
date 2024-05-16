@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "Project Name 1",
+        "description": "Description for Project 1.",
+        "image": "https://dummyimage.com/300x400/343a40/6c757d"
+    },
+    {
+        "id": 2,
+        "name": "Project Name 2",
+        "description": "Description for Project 2.",
+        "image": "https://dummyimage.com/300x400/343a40/6c757d"
+    }
+]
